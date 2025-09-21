@@ -79,10 +79,18 @@ jobs:
 
     steps:
       # Step 1: Set up SSH key with passphrase for deployment
+      # Step 1: Set up SSH key with passphrase for deployment
       - name: Set up SSH key with passphrase
         run: |
+          # Start the SSH agent
           eval $(ssh-agent -s)
-          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+
+          # Add the private key to the agent using the passphrase from secrets
+          echo "$SSH_PRIVATE_KEY" | ssh-add - <<< "$SSH_PASSPHRASE"
+
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
 
       # Step 2: Deploy to Server via SSH
       - name: Deploy to Server via SSH
