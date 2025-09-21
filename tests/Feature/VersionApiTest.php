@@ -62,6 +62,23 @@ class VersionApiTest extends TestCase
                  ->assertJsonValidationErrors('body');
     }
 
+    /**
+     * @test
+     */
+    public function it_returns_a_validation_error_for_an_invalid_payload(): void
+    {
+        $payloads = [
+            'empty_object' => [],
+            'multiple_keys' => ['key1' => 'value1', 'key2' => 'value2'],
+            'not_an_object' => ['just_a_value']
+        ];
+
+        foreach ($payloads as $payload) {
+            $response = $this->postJson('/api/version', $payload);
+            $response->assertStatus(422);
+        }
+    }
+
     /** @test */
     public function it_can_get_the_version_for_a_key(): void
     {
@@ -94,6 +111,22 @@ class VersionApiTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson(['value' => 'v2']);
+    }
+
+     /** @test */
+    public function it_can_get_the_version_for_a_key_and_invalid_timestamp(): void
+    {
+        $data = Version::create([
+            'key' => 'api_endpoint', 
+            'value' => 'v2',
+            'created_at' => now()->getTimestamp()
+        ]);
+        
+        $timestamp = 'ASDKJKABC23';
+
+        $response = $this->getJson("/api/version/api_endpoint?timestamp={$timestamp}");
+
+        $response->assertStatus(422);
     }
 
     /** @test */
