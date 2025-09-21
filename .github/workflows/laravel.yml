@@ -53,23 +53,17 @@ jobs:
         id: run-tests
         run: php artisan test --log-junit junit.xml --coverage-clover=coverage.clover.xml --coverage-html=storage/logs/coverage
 
-      # This debugging step is no longer needed but can be useful if the problem persists.
-      - name: Debug JUnit XML File
-        if: success() || failure() # This ensures the step always runs
-        run: |
-          echo "--- Checking for junit.xml file ---"
-          if [ -f "junit.xml" ]; then
-            echo "junit.xml exists. Contents:"
-            cat junit.xml
-          else
-            echo "ERROR: junit.xml was not created."
-          fi
-          echo "--- End of check ---"
+      # This action reads the junit.xml file and posts a detailed summary.
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: junit.xml
 
       # Step 7: Generate HTML Test Report Summary
       # This action needs 'checks: write' permission to post the report
       - name: Generate HTML Test Report Summary
-        if: steps.run-tests.outcome == 'success'
+        if: always()
         uses: dorny/test-reporter@v1
         with:
           name: Unit Test Results
