@@ -85,9 +85,14 @@ jobs:
           # Start the SSH agent
           eval $(ssh-agent -s)
 
-          # Add the private key to the agent using the passphrase from secrets
-          echo "$SSH_PRIVATE_KEY" | ssh-add - <<< "$SSH_PASSPHRASE"
+          # Save the private key to a file
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
 
+          # Set permissions for the SSH private key file
+          chmod 600 ~/.ssh/id_rsa
+
+          # Add the private key to the agent with the passphrase from GitHub Secrets
+          echo "$SSH_PASSPHRASE" | ssh-add ~/.ssh/id_rsa
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
