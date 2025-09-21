@@ -64,12 +64,13 @@ jobs:
         run: php artisan test --coverage-text --coverage-clover=coverage.xml
 
         # Step 2: Auto Deploy via SSH
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        env:
-          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+      - name: Set up SSH key and passphrase
+        run: |
+          # Start the SSH agent
+          eval $(ssh-agent -s)
+
+          # Add the private key to the agent with the passphrase
+          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
 
       - name: Deploy to Server via SSH
         run: |
