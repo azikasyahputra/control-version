@@ -42,18 +42,34 @@ jobs:
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan key:generate
 
-      # Step 6: Run Migrations & Tests
-      - name: Run Migrations & Tests
-        run: |
-          php artisan migrate
-          php artisan test --coverage-clover=coverage.clover.xml
+      # Step 6: Run Tests & Generate Reports
+      - name: Run Tests & Generate Reports
+        run: php artisan test --log-junit junit.xml --coverage-clover=coverage.clover.xml --coverage-html=storage/logs/coverage
 
-      # Step 7: Upload coverage artifact
-      - name: Upload Coverage Report
+      # Step 7: Generate HTML Test Report Summary
+      # This new step reads the junit.xml file and creates a user-friendly summary.
+      - name: Generate HTML Test Report Summary
+        uses: dorny/test-reporter@v1
+        if: success() || failure() # run this step even if tests fail
+        with:
+          name: Unit Test Results
+          path: junit.xml
+          reporter: jest-junit # This reporter creates a nice summary view
+
+      # Step 8: Upload Clover XML Coverage Report
+      - name: Upload Clover XML Coverage Report
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-report
+          name: coverage-report-xml
           path: coverage.clover.xml
+          retention-days: 3
+
+      # Step 9: Upload HTML Coverage Report
+      - name: Upload HTML Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-html
+          path: storage/logs/coverage
           retention-days: 3
 
   deploy:
