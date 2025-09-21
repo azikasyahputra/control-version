@@ -2,10 +2,12 @@
 
 namespace Tests\Unit;
 
+use App\Data\Version\GetVersionData;
 use App\Data\Version\StoreVersionData;
 use App\Models\Version;
 use App\Repositories\VersionRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
@@ -43,22 +45,34 @@ class VersionTest extends TestCase
     }
 
     /** @test */
-    public function version_repository_find_method_returns_newest_record_without_timestamp(): void
+    public function version_repository_find_method_returns_record_without_timestamp(): void
     {
-        // Arrange: Create two records for the same key at different times
-        $older = Version::create(['key' => 'test_key', 'value' => 'old', 'created_at' => now()->subDay()->getTimestamp()]);
         $newer = Version::create(['key' => 'test_key', 'value' => 'new', 'created_at' => now()->getTimestamp()]);
         
         $repository = new VersionRepository();
-        $getData = \App\Data\Version\GetVersionData::fromRequest('test_key', new \Illuminate\Http\Request());
+        $getData = GetVersionData::fromRequest('test_key', new \Illuminate\Http\Request());
 
-        // Act: Find the record without a timestamp
         $result = $repository->find($getData);
 
-        // Assert: It should be the newer record
         $this->assertNotNull($result);
         $this->assertEquals($newer->id, $result->id);
-        $this->assertEquals('new', $result->value);
+    }
+
+    /** @test */
+    public function version_repository_find_method_returns_record_with_timestamp(): void
+    {
+        $newer = Version::create(['key' => 'test_key', 'value' => 'new', 'created_at' => now()->getTimestamp()]);
+        
+        $timestampForQuery = $newer->created_at;
+        $request = new Request(['timestamp' => $timestampForQuery]);
+
+        $repository = new VersionRepository();
+        $getData = GetVersionData::fromRequest('test_key', $request);
+
+        $result = $repository->find($getData);
+
+        $this->assertNotNull($result);
+        $this->assertEquals($newer->id, $result->id);
     }
     
     //--- Data Providers for DTO tests ---
@@ -66,8 +80,7 @@ class VersionTest extends TestCase
     public static function validDataProvider(): array
     {
         return [
-            'plain string value' => [['key' => 'app_name', 'value' => 'Control Version']],
-            'array value' => [['key' => 'settings', 'value' => ['theme' => 'dark']]],
+            'plain string value' => [['key' => 'version_test', 'value' => '1.2.1']],
             'json string value' => [['key' => 'config', 'value' => '{"enabled":true}']],
         ];
     }

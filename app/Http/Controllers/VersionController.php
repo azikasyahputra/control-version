@@ -36,6 +36,6 @@ class VersionController extends Controller
     {
         $getVersionDto = GetVersionData::fromRequest($id,$request);
         $versionData = $this->versionServices->find($getVersionDto);
-        return response()->json($versionData,200);
+        return response()->json($versionData['data'],$versionData['code']);
     }
 }

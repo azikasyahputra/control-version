@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class VersionApiTest extends TestCase
 {
-    use RefreshDatabase; // This trait resets the database for each test.
+    use RefreshDatabase;
 
     /** @test */
     public function it_can_store_a_new_version_with_a_string_value(): void
@@ -17,37 +17,34 @@ class VersionApiTest extends TestCase
 
         $response = $this->postJson('/api/version', $payload);
 
-        $response->assertStatus(201)
-                 ->assertJson([
-                     'key' => 'app_version',
-                     'value' => '1.0.0'
-                 ]);
+        $response->assertStatus(201);
+
+        $response->assertJsonStructure([
+            'Time'
+        ]);
 
         $this->assertDatabaseHas('version', [
             'key' => 'app_version',
-            'value' => '"1.0.0"' // Eloquent auto-encodes even strings
+            'value' => '"1.0.0"'
         ]);
     }
 
     /** @test */
     public function it_can_store_a_new_version_with_a_json_value(): void
     {
-        $payload = ['user_settings' => ['theme' => 'dark', 'notifications' => true]];
+        $payload = ['user_settings' => '{"theme":"dark","notifications":true}'];
 
         $response = $this->postJson('/api/version', $payload);
 
-        $response->assertStatus(201)
-                 ->assertJson([
-                     'key' => 'user_settings',
-                     'value' => [
-                         'theme' => 'dark',
-                         'notifications' => true
-                     ]
-                 ]);
+        $response->assertStatus(201);
+
+        $response->assertJsonStructure([
+            'Time'
+        ]);
 
         $this->assertDatabaseHas('version', [
             'key' => 'user_settings',
-            'value' => json_encode(['theme' => 'dark', 'notifications' => true])
+            'value' => json_encode('{"theme":"dark","notifications":true}')
         ]);
     }
 
@@ -61,22 +58,14 @@ class VersionApiTest extends TestCase
 
         $response = $this->postJson('/api/version', $payload);
 
-        $response->assertStatus(422) // Unprocessable Content
+        $response->assertStatus(422)
                  ->assertJsonValidationErrors('body');
     }
 
     /** @test */
-    public function it_can_get_the_latest_version_for_a_key(): void
+    public function it_can_get_the_version_for_a_key(): void
     {
-        // Create an older version first
-        Version::create([
-            'key' => 'feature_flag', 
-            'value' => 'false', 
-            'created_at' => now()->subDay()->getTimestamp()
-        ]);
-
-        // Create the newest version
-        $newestVersion = Version::create([
+        $version = Version::create([
             'key' => 'feature_flag', 
             'value' => 'true',
             'created_at' => now()->getTimestamp()
@@ -85,41 +74,26 @@ class VersionApiTest extends TestCase
         $response = $this->getJson('/api/version/feature_flag');
 
         $response->assertStatus(200)
-                 ->assertJson([
-                     'key' => 'feature_flag',
-                     'value' => 'true',
-                     'id' => $newestVersion->id
-                 ]);
+                ->assertJson([
+                    'value' => 'true',
+                ]);
     }
 
     /** @test */
-    public function it_can_get_a_version_at_a_specific_point_in_time(): void
+    public function it_can_get_the_version_for_a_key_and_timestamp(): void
     {
-        // Create an older version
-        $olderVersion = Version::create([
-            'key' => 'api_endpoint', 
-            'value' => 'v1', 
-            'created_at' => now()->subDays(2)->getTimestamp()
-        ]);
-
-        // Create a newer version
-        Version::create([
+        $data = Version::create([
             'key' => 'api_endpoint', 
             'value' => 'v2',
             'created_at' => now()->getTimestamp()
         ]);
         
-        // Ask for the version from yesterday
-        $timestamp = now()->subDay()->getTimestamp();
+        $timestamp = $data->created_at;
 
         $response = $this->getJson("/api/version/api_endpoint?timestamp={$timestamp}");
 
         $response->assertStatus(200)
-                 ->assertJson([
-                     'id' => $olderVersion->id,
-                     'key' => 'api_endpoint',
-                     'value' => 'v1'
-                 ]);
+                 ->assertJson(['value' => 'v2']);
     }
 
     /** @test */

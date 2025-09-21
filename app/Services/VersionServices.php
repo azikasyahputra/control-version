@@ -33,10 +33,23 @@ class VersionServices
 
     public function find(GetVersionData $data): array
     {
+        $code = 200;
+        $version = null;
+
         $dataVersion =  $this->versionRepository->find($data);
-        $version = [
-            'version' => $dataVersion->value
+        if(empty($dataVersion)){
+            $code = 404;
+        }else{
+            $version = [
+                'value' => $dataVersion->value
+            ];
+        }
+
+        $data = [
+            'data' => $version,
+            'code'=>$code
         ];
-        return $version;
+        
+        return $data;
     }
 }
