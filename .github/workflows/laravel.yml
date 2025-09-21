@@ -35,25 +35,25 @@ jobs:
           mkdir -p database
           touch database/database.sqlite
 
-      - name: Run Tests and Generate Reports
+      - name: Run Tests and Generate Reports (Unit + Coverage)
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
         run: |
-          # Generate the PHPUnit test report
-          php artisan test --coverage-text --coverage-clover=coverage.xml
+          # Run tests and generate both XML and HTML reports
+          php artisan test --coverage-xml=storage/test-coverage/coverage.xml --coverage-html=storage/test-coverage/html
 
-      - name: Upload PHPUnit Test Report
-        uses: actions/upload-artifact@latest
+      - name: Upload PHPUnit XML Coverage Report
+        uses: actions/upload-artifact@v4
         with:
-          name: phpunit-report
-          path: storage/logs/phpunit-report.xml
+          name: phpunit-coverage-xml
+          path: storage/test-coverage/coverage.xml
 
-      - name: Upload Code Coverage Report
-        uses: actions/upload-artifact@latest
+      - name: Upload PHPUnit HTML Coverage Report
+        uses: actions/upload-artifact@v4
         with:
-          name: code-coverage-report
-          path: coverage.xml
+          name: phpunit-coverage-html
+          path: storage/test-coverage/html/*
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
         env:
