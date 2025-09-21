@@ -50,12 +50,13 @@ jobs:
 
       # Step 6: Run Tests & Generate Reports
       - name: Run Tests & Generate Reports
+        id: run-tests
         run: php artisan test --log-junit junit.xml --coverage-clover=coverage.clover.xml --coverage-html=storage/logs/coverage
 
       # Step 7: Generate HTML Test Report Summary
       # This action needs 'checks: write' permission to post the report
       - name: Generate HTML Test Report Summary
-        if: always()
+        if: steps.run-tests.outcome == 'success'
         uses: dorny/test-reporter@v1
         with:
           name: Unit Test Results
@@ -64,6 +65,7 @@ jobs:
 
       # Step 8: Upload Clover XML Coverage Report
       - name: Upload Clover XML Coverage Report
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-xml
