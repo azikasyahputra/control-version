@@ -14,13 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Setup PHP with Xdebug for code coverage
+      # Step 2: Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.1"
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-          coverage: xdebug # Use Xdebug for coverage
+          extensions: sqlite, pdo_sqlite
+          coverage: xdebug
 
       # Step 3: Cache Composer dependencies
       - name: Cache Composer packages
@@ -34,7 +34,7 @@ jobs:
 
       # Step 4: Install Composer Dependencies
       - name: Install Dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress
 
       # Step 5: Prepare Laravel Application
       - name: Prepare Application
@@ -42,33 +42,23 @@ jobs:
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan key:generate
 
-      # Step 6: Prepare Test Database
-      - name: Create Test Database
+      # Step 6: Run Migrations & Tests
+      - name: Run Migrations & Tests
         run: |
-          mkdir -p database
-          touch database/database.sqlite
-          php artisan migrate --env=testing
+          php artisan migrate
+          php artisan test --coverage-clover=coverage.clover.xml
 
-      # Step 7: Run tests and generate coverage reports (ONCE)
-      - name: Run Tests & Generate Coverage
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
-        run: php artisan test --coverage-clover=coverage.clover.xml --coverage-html=storage/logs/coverage
-
-      # Step 8: Upload HTML Coverage Report as an artifact
-      - name: Upload HTML Coverage Report
+      # Step 7: Upload coverage artifact
+      - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
-          name: laravel-coverage-html
-          path: storage/logs/coverage
+          name: coverage-report
+          path: coverage.clover.xml
           retention-days: 3
 
   deploy:
     runs-on: ubuntu-latest
-    # This job needs the tests to pass before running
     needs: control-version-tests
-    # IMPORTANT: Only run this deployment step on pushes to the main branch
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
@@ -83,7 +73,6 @@ jobs:
             cd /home/u300028099/domains/azikasyahputra.com/public_html/control-version
             git pull origin main
 
-            # Only run composer install if composer.lock has changed
             if git diff --name-only HEAD~1 HEAD | grep -q "composer.lock"; then
               echo "composer.lock has changed, running composer install."
               composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
@@ -91,7 +80,6 @@ jobs:
               echo "composer.lock has not changed, skipping composer install."
             fi
 
-            # Run production optimizations
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
