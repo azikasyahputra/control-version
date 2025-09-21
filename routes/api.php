@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VersionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/version', [VersionController::class, 'store']);
+Route::get('/version/get_all_records', [VersionController::class, 'index']);
+Route::get('/version/{key}', [VersionController::class, 'show']);
