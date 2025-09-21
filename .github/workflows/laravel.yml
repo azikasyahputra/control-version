@@ -6,11 +6,17 @@ on:
   pull_request:
     branches: ["main"]
 
+# ✅ THE FIX: Add this permissions block to grant the workflow rights to write checks.
+permissions:
+  checks: write
+  contents: read
+
 jobs:
   control-version-tests:
     runs-on: ubuntu-latest
     steps:
       # Step 1: Checkout the code
+      # The 'actions/checkout' action needs 'contents: read' permission
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -47,14 +53,14 @@ jobs:
         run: php artisan test --log-junit junit.xml --coverage-clover=coverage.clover.xml --coverage-html=storage/logs/coverage
 
       # Step 7: Generate HTML Test Report Summary
-      # This new step reads the junit.xml file and creates a user-friendly summary.
+      # This action needs 'checks: write' permission to post the report
       - name: Generate HTML Test Report Summary
         uses: dorny/test-reporter@v1
-        if: success() || failure() # run this step even if tests fail
+        if: success() || failure()
         with:
           name: Unit Test Results
           path: junit.xml
-          reporter: java-junit # This reporter creates a nice summary view
+          reporter: java-junit
 
       # Step 8: Upload Clover XML Coverage Report
       - name: Upload Clover XML Coverage Report
