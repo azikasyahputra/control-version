@@ -63,14 +63,14 @@ jobs:
           DB_DATABASE: database/database.sqlite
         run: php artisan test --coverage-text --coverage-clover=coverage.xml
 
-        # Step 2: Auto Deploy via SSH
-      - name: Set up SSH key and passphrase
+      # Step 2: Auto Deploy via SSH
+      - name: Set up SSH key with passphrase
         run: |
           # Start the SSH agent
           eval $(ssh-agent -s)
 
           # Add the private key to the agent with the passphrase
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add <(echo "${{ secrets.SSH_PASSPHRASE }}")
+          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
 
       - name: Deploy to Server via SSH
         run: |
