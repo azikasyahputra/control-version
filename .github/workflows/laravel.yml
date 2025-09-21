@@ -70,7 +70,7 @@ jobs:
           eval $(ssh-agent -s)
 
           # Add the private key to the agent with the passphrase
-          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add <(echo "${{ secrets.SSH_PASSPHRASE }}")
 
       - name: Deploy to Server via SSH
         run: |
