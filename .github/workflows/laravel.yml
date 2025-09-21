@@ -78,12 +78,11 @@ jobs:
     needs: laravel-tests # Ensure deployment only happens after tests pass
 
     steps:
-      # Step 1: Set up SSH key with passphrase for deployment
+      # Step 1: Set up SSH deployment
       - name: Set up SSH key with passphrase
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
 
       # Step 2: Deploy to Server via SSH
       - name: Deploy to Server via SSH
