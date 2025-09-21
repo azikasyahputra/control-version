@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  tests:
+  control-version-tests:
     runs-on: ubuntu-latest
     steps:
       # Step 1: Checkout the code
@@ -67,7 +67,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     # This job needs the tests to pass before running
-    needs: laravel-tests
+    needs: control-version-tests
     # IMPORTANT: Only run this deployment step on pushes to the main branch
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
