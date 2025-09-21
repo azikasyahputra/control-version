@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class VersionController extends Controller
-{
+{    
     protected $versionServices;
 
     public function __construct(VersionServices $versionServices)
