@@ -53,22 +53,12 @@ jobs:
         id: run-tests
         run: php artisan test --log-junit junit.xml --coverage-clover=coverage.clover.xml --coverage-html=storage/logs/coverage
 
-      # This action reads the junit.xml file and posts a detailed summary.
+      # Step 7: Publish Test Results
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: junit.xml
-
-      # Step 7: Generate HTML Test Report Summary
-      # This action needs 'checks: write' permission to post the report
-      - name: Generate HTML Test Report Summary
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: Unit Test Results
-          path: junit.xml
-          reporter: java-junit
 
       # Step 8: Upload Clover XML Coverage Report
       - name: Upload Clover XML Coverage Report
