@@ -48,15 +48,52 @@ jobs:
         with:
           name: phpunit-coverage-xml
           path: storage/test-coverage/coverage.xml
+          retention-days: 3
 
       - name: Upload PHPUnit HTML Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: phpunit-coverage-html
           path: storage/test-coverage/html/*
+          retention-days: 3
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
         run: php artisan test --coverage-text --coverage-clover=coverage.xml
+
+        # Step 2: Auto Deploy via SSH
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+
+      - name: Deploy to Server via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no -p 65002 u300028099@195.35.62.16 << 'EOF'
+            # Navigate to your project directory
+            cd /home/u300028099/domains/azikasyahputra.com/public_html/control-version
+
+            # Pull the latest code from the 'main' branch
+            git pull origin main
+
+            # Check if the vendor directory exists or composer.json has changed
+            if [ ! -d "vendor" ] || [ $(git diff --name-only HEAD~1 HEAD | grep "composer.json") ]; then
+              echo "Either vendor directory not found or composer.json has changed, running composer install"
+              composer install --no-dev --optimize-autoloader
+            else
+              echo "Vendor directory exists and composer.json has not changed, skipping composer install"
+            fi
+
+            # Run any database migrations
+            php artisan migrate --force
+
+            # Cache configuration and routes
+            php artisan config:cache
+            php artisan route:cache
+
+            # Optimize the application
+            php artisan optimize
+          EOF
