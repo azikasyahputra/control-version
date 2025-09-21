@@ -48,6 +48,29 @@ class VersionApiTest extends TestCase
         ]);
     }
 
+     /** @test */
+    public function it_can_store_a_new_version_with_a_array_value(): void
+    {
+        $jsonData = json_encode([
+            'theme' => 'dark', 
+            'version' => 2
+        ]);
+        $payload = ['user_prefs' => $jsonData];
+
+        $response = $this->postJson('/api/version', $payload);
+
+        $response->assertStatus(201);
+
+        $response->assertJsonStructure([
+            'Time'
+        ]);
+
+        $this->assertDatabaseHas('version', [
+            'key' => 'user_prefs',
+            'value' => json_encode($jsonData)
+        ]);
+    }
+
     /** @test */
     public function it_fails_to_store_if_body_has_more_than_one_key(): void
     {
