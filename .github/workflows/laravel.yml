@@ -55,8 +55,8 @@ jobs:
       # Step 7: Generate HTML Test Report Summary
       # This action needs 'checks: write' permission to post the report
       - name: Generate HTML Test Report Summary
+        if: always()
         uses: dorny/test-reporter@v1
-        if: success() || failure()
         with:
           name: Unit Test Results
           path: junit.xml
