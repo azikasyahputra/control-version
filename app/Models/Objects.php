@@ -16,15 +16,21 @@ class Objects extends Model
     protected $fillable = [
         'key',
         'value',
-        'created_at',
+        'created_at'
     ];
 
     protected $casts = [
         'value' => 'array',
     ];
 
-    public function setCreatedAtAttribute($value)
+    protected static function boot()
     {
-        $this->attributes['created_at'] = $value ?: time();
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->created_at)) {
+                $model->created_at = time();
+            }
+        });
     }
 }

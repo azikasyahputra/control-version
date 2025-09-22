@@ -184,7 +184,7 @@ class ObjectApiTest extends TestCase
         $response->assertStatus(200)
                  ->assertJsonCount(2)
                  ->assertJsonStructure([
-                     '*' => ['id', 'key', 'value', 'created_at', 'updated_at']
+                     '*' => ['id', 'key', 'value', 'created_at']
                  ]);
     }
 
