@@ -9,21 +9,22 @@ class Objects extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'objects';
 
     protected $fillable = [
         'key',
-        'value'
+        'value',
+        'created_at',
     ];
 
     protected $casts = [
         'value' => 'array',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
     ];
 
-    public function getDateFormat(): string
+    public function setCreatedAtAttribute($value)
     {
-        return 'U';
+        $this->attributes['created_at'] = $value ?: time();
     }
 }

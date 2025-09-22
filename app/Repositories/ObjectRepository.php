@@ -26,9 +26,10 @@ class ObjectRepository implements ObjectRepositoryInterface
         $query = Objects::query()->where('key', $data->key);
 
         if ($data->timestamp !== null) {
-            $query->where('created_at', '<=', $data->timestamp);
+            $query->where('created_at', '=', $data->timestamp);
         }
 
+        $query->orderBy('id','DESC');
         return $query->first();
     }
 }

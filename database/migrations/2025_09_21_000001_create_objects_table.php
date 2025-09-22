@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('objects', function (Blueprint $table) {
             $table->id();
-            $table->string('key',191)->unique();
+            $table->string('key');
             $table->longText('value');
-            $table->unsignedInteger('created_at');
-            $table->unsignedInteger('updated_at');
+            $table->unsignedInteger('created_at')->nullable();
         });
     }
 

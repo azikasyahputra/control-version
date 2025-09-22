@@ -66,6 +66,28 @@ class ObjectRepositoryTest extends TestCase
         $this->assertNotNull($result);
         $this->assertEquals($key, $result->key);
     }
+
+     /** @test */
+    public function find_by_key_with_query_finds_the_latest_value_object()
+    {
+        $key = 'version';
+        // Arrange
+        $value1 = 'version1.0';
+        $object1 = Objects::factory()->create(['key' =>$key,'value'=>$value1]);
+
+        $value2 = 'version1.1';
+        $object2 = Objects::factory()->create(['key' =>$key, 'value'=>$value2]);
+
+        $getObjectData = GetObjectData::fromRequest($key, new Request());
+
+        // Act
+        $result = $this->objectRepository->findByIdWithQuery($getObjectData);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertNotEquals($object1->id,$result->id);
+        $this->assertEquals($object2->id, $result->id);
+    }
     
     /** @test */
     public function find_by_key_with_query_timestamp_finds_the_value_object()
