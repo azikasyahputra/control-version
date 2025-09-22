@@ -85,6 +85,25 @@ class VersionApiTest extends TestCase
                  ->assertJsonValidationErrors('body');
     }
 
+     /** @test */
+    public function it_fails_to_store_if_key_already_exist(): void
+    {
+        Version::create([
+            'key' => 'key_one',
+            'value' => 'value_one',
+        ]);
+
+        $payload = [
+            'key' => 'key_one',
+            'value' => 'value_two',
+        ];
+
+        $response = $this->postJson('/api/version', $payload);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors('body');
+    }
+
     /**
      * @test
      */
@@ -172,5 +191,12 @@ class VersionApiTest extends TestCase
                  ->assertJsonStructure([
                      '*' => ['id', 'key', 'value', 'created_at', 'updated_at']
                  ]);
+    }
+
+    /** @test */
+    public function it_can_not_found_if_there_are_no_records(): void
+    {
+        $response = $this->getJson('/api/version/get_all_records');
+        $response->assertStatus(404);
     }
 }

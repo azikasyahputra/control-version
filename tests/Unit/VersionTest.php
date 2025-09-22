@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Data\Version\GetVersionData;
 use App\Data\Version\StoreVersionData;
 use App\Models\Version;
-use App\Repositories\VersionRepository;
+use App\Interfaces\VersionRepositoryInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -49,10 +49,10 @@ class VersionTest extends TestCase
     {
         $newer = Version::create(['key' => 'test_key', 'value' => 'new', 'created_at' => now()->getTimestamp()]);
         
-        $repository = new VersionRepository();
-        $getData = GetVersionData::fromRequest('test_key', new \Illuminate\Http\Request());
+        $repository = app(VersionRepositoryInterface::class);
+        $getData = GetVersionData::fromRequest('test_key', new Request());
 
-        $result = $repository->find($getData);
+        $result = $repository->findByIdWithQuery($getData);
 
         $this->assertNotNull($result);
         $this->assertEquals($newer->id, $result->id);
@@ -66,10 +66,10 @@ class VersionTest extends TestCase
         $timestampForQuery = $newer->created_at;
         $request = new Request(['timestamp' => $timestampForQuery]);
 
-        $repository = new VersionRepository();
+        $repository = app(VersionRepositoryInterface::class);
         $getData = GetVersionData::fromRequest('test_key', $request);
 
-        $result = $repository->find($getData);
+        $result = $repository->findByIdWithQuery($getData);
 
         $this->assertNotNull($result);
         $this->assertEquals($newer->id, $result->id);

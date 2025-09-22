@@ -8,10 +8,12 @@ use App\Http\Requests\DynamicKeyStoreRequest;
 use App\Services\VersionServices;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+use App\Traits\ResponseTrait;
 
 class VersionController extends Controller
 {    
+    use ResponseTrait;
+
     protected $versionServices;
 
     public function __construct(VersionServices $versionServices)
@@ -22,29 +24,30 @@ class VersionController extends Controller
     public function index() : JsonResponse
     {
         $versionData = $this->versionServices->all();
+        
+        if ($versionData->isEmpty()) {
+            return $this->error(['message' => 'Data Not Found'], 404);
+        }
+
         return response()->json($versionData,200);
     }
 
     public function store(DynamicKeyStoreRequest $request) : JsonResponse
     {
-        try{
-            $dynamicData = $request->getDynamicKeyAndValue();
-            $storeVersionDto = StoreVersionData::fromArray($dynamicData);
-            $storeVersion = $this->versionServices->store($storeVersionDto);
-            return response()->json($storeVersion,201);
-        }catch(ValidationException $exception){
-            return response()->json($exception->errors(), 422);
-        }
+        $dynamicData = $request->getDynamicKeyAndValue();
+        $storeVersionDto = StoreVersionData::fromArray($dynamicData);
+        $storeVersion = $this->versionServices->store($storeVersionDto);
+        return $this->success($storeVersion,201);
     }
 
     public function show(string $id, Request $request): JsonResponse
     {
-        try{
-            $getVersionDto = GetVersionData::fromRequest($id,$request);
-            $versionData = $this->versionServices->find($getVersionDto);
-            return response()->json($versionData['data'],$versionData['code']);
-        }catch(ValidationException $exception){
-            return response()->json($exception->errors(), 422);
+        $getVersionDto = GetVersionData::fromRequest($id,$request);
+        $versionData = $this->versionServices->find($getVersionDto);
+
+        if ($versionData === null) {
+            return $this->error(['message' => 'Data Not Found'], 404);
         }
+        return $this->success($versionData);
     }
 }
