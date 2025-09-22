@@ -2,27 +2,27 @@
 
 namespace Tests\Unit\Services;
 
-use App\Data\Version\GetVersionData;
-use App\Data\Version\StoreVersionData;
-use App\Interfaces\VersionRepositoryInterface;
-use App\Models\Version;
-use App\Services\VersionServices;
+use App\Data\Object\GetObjectData;
+use App\Data\Object\StoreObjectData;
+use App\Interfaces\ObjectRepositoryInterface;
+use App\Models\Objects;
+use App\Services\ObjectServices;
 use Illuminate\Database\Eloquent\Collection;
 use Mockery;
 use Tests\TestCase;
 
-class VersionServicesTest extends TestCase
+class ObjectServicesTest extends TestCase
 {
-    protected $versionRepositoryMock;
-    protected $versionServices;
+    protected $objectRepositoryMock;
+    protected $objectServices;
 
     public function setUp(): void
     {
         parent::setUp();
         // Mock the repository interface
-        $this->versionRepositoryMock = Mockery::mock(VersionRepositoryInterface::class);
+        $this->objectRepositoryMock = Mockery::mock(ObjectRepositoryInterface::class);
         // Instantiate the service with the mock
-        $this->versionServices = new VersionServices($this->versionRepositoryMock);
+        $this->objectServices = new ObjectServices($this->objectRepositoryMock);
     }
 
     public function tearDown(): void
@@ -37,14 +37,14 @@ class VersionServicesTest extends TestCase
     public function all_returns_collection_from_repository()
     {
         // Arrange
-        $expectedCollection = new Collection([new Version(['key' => 'test'])]);
-        $this->versionRepositoryMock
+        $expectedCollection = new Collection([new Objects(['key' => 'test'])]);
+        $this->objectRepositoryMock
             ->shouldReceive('getAll')
             ->once()
             ->andReturn($expectedCollection);
 
         // Act
-        $result = $this->versionServices->all();
+        $result = $this->objectServices->all();
 
         // Assert
         $this->assertEquals($expectedCollection, $result);
@@ -57,13 +57,13 @@ class VersionServicesTest extends TestCase
     public function all_returns_empty_collection_if_repository_returns_null()
     {
         // Arrange
-        $this->versionRepositoryMock
+        $this->objectRepositoryMock
             ->shouldReceive('getAll')
             ->once()
             ->andReturn(new Collection());
 
         // Act
-        $result = $this->versionServices->all();
+        $result = $this->objectServices->all();
 
         // Assert
         $this->assertInstanceOf(Collection::class, $result);
@@ -76,18 +76,18 @@ class VersionServicesTest extends TestCase
     public function store_creates_data_and_returns_formatted_timestamp()
     {
         // Arrange
-        $storeDataDto = StoreVersionData::fromArray(['key' => 'my-key', 'value' => 'my-value']);
-        $createdVersion = new Version(['key' => 'my-key', 'value' => 'my-value']);
-        $createdVersion->created_at = now()->timestamp; // Set a timestamp
+        $storeDataDto = StoreObjectData::fromArray(['key' => 'my-key', 'value' => 'my-value']);
+        $createdObject = new Objects(['key' => 'my-key', 'value' => 'my-value']);
+        $createdObject->created_at = now()->timestamp; // Set a timestamp
 
-        $this->versionRepositoryMock
+        $this->objectRepositoryMock
             ->shouldReceive('create')
             ->once()
             ->with($storeDataDto)
-            ->andReturn($createdVersion);
+            ->andReturn($createdObject);
 
         // Act
-        $result = $this->versionServices->store($storeDataDto);
+        $result = $this->objectServices->store($storeDataDto);
 
         // Assert
         $this->assertIsArray($result);
@@ -103,21 +103,21 @@ class VersionServicesTest extends TestCase
         // Arrange
         $key = 'find-key';
         $request = new \Illuminate\Http\Request();
-        $getVersionDto = GetVersionData::fromRequest($key, $request);
-        $expectedVersion = new Version(['key' => $key, 'value' => 'some-value']);
+        $getObjectDto = GetObjectData::fromRequest($key, $request);
+        $expectedObject = new Objects(['key' => $key, 'value' => 'some-value']);
         
-        $this->versionRepositoryMock
+        $this->objectRepositoryMock
             ->shouldReceive('findByIdWithQuery')
             ->once()
-            ->with($getVersionDto)
-            ->andReturn($expectedVersion);
+            ->with($getObjectDto)
+            ->andReturn($expectedObject);
             
         // Act
-        $result = $this->versionServices->find($getVersionDto);
+        $result = $this->objectServices->find($getObjectDto);
 
         // Assert
-        $this->assertInstanceOf(Version::class, $result);
-        $this->assertEquals($expectedVersion, $result);
+        $this->assertInstanceOf(Objects::class, $result);
+        $this->assertEquals($expectedObject, $result);
     }
     
     /**
@@ -128,16 +128,16 @@ class VersionServicesTest extends TestCase
         // Arrange
         $key = 'non-existent-key';
         $request = new \Illuminate\Http\Request();
-        $getVersionDto = GetVersionData::fromRequest($key, $request);
+        $getObjectDto = GetObjectData::fromRequest($key, $request);
 
-        $this->versionRepositoryMock
+        $this->objectRepositoryMock
             ->shouldReceive('findByIdWithQuery')
             ->once()
-            ->with($getVersionDto)
+            ->with($getObjectDto)
             ->andReturn(null);
 
         // Act
-        $result = $this->versionServices->find($getVersionDto);
+        $result = $this->objectServices->find($getObjectDto);
 
         // Assert
         $this->assertNull($result);

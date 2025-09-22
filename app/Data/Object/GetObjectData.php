@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Data\Version;
+namespace App\Data\Object;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class GetVersionData {
+class GetObjectData {
     public function __construct(
         public readonly string $key,
         public readonly ?int $timestamp

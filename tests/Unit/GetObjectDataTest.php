@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Data;
 
-use App\Data\Version\GetVersionData;
+use App\Data\Object\GetObjectData;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
-class GetVersionDataTest extends TestCase
+class GetObjectDataTest extends TestCase
 {
     /** @test */
     public function it_can_be_instantiated_from_a_request_with_valid_data()
@@ -18,10 +18,10 @@ class GetVersionDataTest extends TestCase
         $request = new Request(['timestamp' => $timestamp]);
 
         // Act
-        $data = GetVersionData::fromRequest($key, $request);
+        $data = GetObjectData::fromRequest($key, $request);
 
         // Assert
-        $this->assertInstanceOf(GetVersionData::class, $data);
+        $this->assertInstanceOf(GetObjectData::class, $data);
         $this->assertEquals($key, $data->key);
         $this->assertEquals($timestamp, $data->timestamp);
     }
@@ -34,10 +34,10 @@ class GetVersionDataTest extends TestCase
         $request = new Request();
 
         // Act
-        $data = GetVersionData::fromRequest($key, $request);
+        $data = GetObjectData::fromRequest($key, $request);
         
         // Assert
-        $this->assertInstanceOf(GetVersionData::class, $data);
+        $this->assertInstanceOf(GetObjectData::class, $data);
         $this->assertEquals($key, $data->key);
         $this->assertNull($data->timestamp);
     }
@@ -53,6 +53,6 @@ class GetVersionDataTest extends TestCase
         $this->expectException(ValidationException::class);
 
         // Act
-        GetVersionData::fromRequest($key, $request);
+        GetObjectData::fromRequest($key, $request);
     }
 }

@@ -2,37 +2,37 @@
 
 namespace Tests\Feature;
 
-use App\Models\Version;
+use App\Models\Objects;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class VersionApiTest extends TestCase
+class ObjectApiTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function it_can_store_a_new_version_with_a_string_value(): void
+    public function it_can_store_a_new_object_with_a_string_value(): void
     {
         $payload = ['app_version' => '1.0.0'];
 
-        $response = $this->postJson('/api/version', $payload);
+        $response = $this->postJson('/api/object', $payload);
 
         $response->assertStatus(201);
 
         $response->assertJsonStructure(['Time']);
 
-        $this->assertDatabaseHas('version', [
+        $this->assertDatabaseHas('objects', [
             'key' => 'app_version',
             'value' => '"1.0.0"'
         ]);
     }
 
     /** @test */
-    public function it_can_store_a_new_version_with_a_json_value(): void
+    public function it_can_store_a_new_object_with_a_json_value(): void
     {
         $payload = ['user_settings' => '{"theme":"dark","notifications":true}'];
 
-        $response = $this->postJson('/api/version', $payload);
+        $response = $this->postJson('/api/object', $payload);
 
         $response->assertStatus(201);
 
@@ -40,14 +40,14 @@ class VersionApiTest extends TestCase
             'Time'
         ]);
 
-        $this->assertDatabaseHas('version', [
+        $this->assertDatabaseHas('objects', [
             'key' => 'user_settings',
             'value' => json_encode('{"theme":"dark","notifications":true}')
         ]);
     }
 
      /** @test */
-    public function it_can_store_a_new_version_with_a_array_value(): void
+    public function it_can_store_a_new_object_with_a_array_value(): void
     {
         $jsonData = json_encode([
             'theme' => 'dark', 
@@ -55,13 +55,13 @@ class VersionApiTest extends TestCase
         ]);
         $payload = ['user_prefs' => $jsonData];
 
-        $response = $this->postJson('/api/version', $payload);
+        $response = $this->postJson('/api/object', $payload);
 
         $response->assertStatus(201);
 
         $response->assertJsonStructure(['Time']);
 
-        $this->assertDatabaseHas('version', [
+        $this->assertDatabaseHas('objects', [
             'key' => 'user_prefs',
             'value' => json_encode($jsonData)
         ]);
@@ -75,7 +75,7 @@ class VersionApiTest extends TestCase
             'key_two' => 'value_two'
         ];
 
-        $response = $this->postJson('/api/version', $payload);
+        $response = $this->postJson('/api/object', $payload);
 
         $response->assertStatus(422)
                  ->assertJsonValidationErrors('body');
@@ -84,7 +84,7 @@ class VersionApiTest extends TestCase
      /** @test */
     public function it_fails_to_store_if_key_already_exist(): void
     {
-        Version::create([
+        Objects::create([
             'key' => 'key_one',
             'value' => 'value_one',
         ]);
@@ -94,7 +94,7 @@ class VersionApiTest extends TestCase
             'value' => 'value_two',
         ];
 
-        $response = $this->postJson('/api/version', $payload);
+        $response = $this->postJson('/api/object', $payload);
 
         $response->assertStatus(422)
                  ->assertJsonValidationErrors('body');
@@ -112,21 +112,21 @@ class VersionApiTest extends TestCase
         ];
 
         foreach ($payloads as $payload) {
-            $response = $this->postJson('/api/version', $payload);
+            $response = $this->postJson('/api/object', $payload);
             $response->assertStatus(422);
         }
     }
 
     /** @test */
-    public function it_can_get_the_version_for_a_key(): void
+    public function it_can_get_the_object_for_a_key(): void
     {
-        Version::create([
+        Objects::create([
             'key' => 'feature_flag', 
             'value' => 'true',
             'created_at' => now()->getTimestamp()
         ]);
 
-        $response = $this->getJson('/api/version/feature_flag');
+        $response = $this->getJson('/api/object/feature_flag');
 
         $response->assertStatus(200)
                 ->assertJson([
@@ -135,9 +135,9 @@ class VersionApiTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_the_version_for_a_key_and_timestamp(): void
+    public function it_can_get_the_object_for_a_key_and_timestamp(): void
     {
-        $data = Version::create([
+        $data = Objects::create([
             'key' => 'api_endpoint', 
             'value' => 'v2',
             'created_at' => now()->getTimestamp()
@@ -145,41 +145,41 @@ class VersionApiTest extends TestCase
         
         $timestamp = $data->created_at;
 
-        $response = $this->getJson("/api/version/api_endpoint?timestamp={$timestamp}");
+        $response = $this->getJson("/api/object/api_endpoint?timestamp={$timestamp}");
 
         $response->assertStatus(200)
                  ->assertJson(['value' => 'v2']);
     }
 
      /** @test */
-    public function it_can_get_the_version_for_a_key_and_invalid_timestamp(): void
+    public function it_can_get_the_object_for_a_key_and_invalid_timestamp(): void
     {
-        $data = Version::create([
+        $data = Objects::create([
             'key' => 'api_endpoint', 
             'value' => 'v2'
         ]);
         
         $timestamp = 'ASDKJKABC23';
 
-        $response = $this->getJson("/api/version/api_endpoint?timestamp={$timestamp}");
+        $response = $this->getJson("/api/object/api_endpoint?timestamp={$timestamp}");
 
         $response->assertStatus(422);
     }
 
     /** @test */
-    public function it_returns_404_if_no_version_is_found_for_a_key(): void
+    public function it_returns_404_if_no_object_is_found_for_a_key(): void
     {
-        $response = $this->getJson('/api/version/non_existent_key');
+        $response = $this->getJson('/api/object/non_existent_key');
         $response->assertStatus(404);
     }
     
     /** @test */
-    public function it_can_get_all_version_records(): void
+    public function it_can_get_all_object_records(): void
     {
-        Version::create(['key' => 'key1', 'value' => 'value1']);
-        Version::create(['key' => 'key2', 'value' => 'value2']);
+        Objects::create(['key' => 'key1', 'value' => 'value1']);
+        Objects::create(['key' => 'key2', 'value' => 'value2']);
 
-        $response = $this->getJson('/api/version/get_all_records');
+        $response = $this->getJson('/api/object/get_all_records');
 
         $response->assertStatus(200)
                  ->assertJsonCount(2)
@@ -191,7 +191,7 @@ class VersionApiTest extends TestCase
     /** @test */
     public function it_can_not_found_if_there_are_no_records(): void
     {
-        $response = $this->getJson('/api/version/get_all_records');
+        $response = $this->getJson('/api/object/get_all_records');
         $response->assertStatus(404);
     }
 }

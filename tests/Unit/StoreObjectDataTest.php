@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Data;
 
-use App\Data\Version\StoreVersionData;
+use App\Data\Object\StoreObjectData;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
-class StoreVersionDataTest extends TestCase
+class StoreObjectDataTest extends TestCase
 {
     /** @test */
     public function it_can_be_instantiated_from_an_array_with_valid_string_data()
@@ -15,10 +15,10 @@ class StoreVersionDataTest extends TestCase
         $data = ['key' => 'test-key', 'value' => 'test-value'];
 
         // Act
-        $dto = StoreVersionData::fromArray($data);
+        $dto = StoreObjectData::fromArray($data);
 
         // Assert
-        $this->assertInstanceOf(StoreVersionData::class, $dto);
+        $this->assertInstanceOf(StoreObjectData::class, $dto);
         $this->assertEquals('test-key', $dto->key);
         $this->assertEquals('test-value', $dto->value);
     }
@@ -31,10 +31,10 @@ class StoreVersionDataTest extends TestCase
         $data = ['key' => 'json-key', 'value' => $jsonData];
 
         // Act
-        $dto = StoreVersionData::fromArray($data);
+        $dto = StoreObjectData::fromArray($data);
 
         // Assert
-        $this->assertInstanceOf(StoreVersionData::class, $dto);
+        $this->assertInstanceOf(StoreObjectData::class, $dto);
         $this->assertEquals('json-key', $dto->key);
         $this->assertEquals($jsonData, $dto->value);
     }
@@ -44,7 +44,7 @@ class StoreVersionDataTest extends TestCase
     {
         // Arrange
         $data = ['key' => 'test-key', 'value' => 'test-value'];
-        $dto = StoreVersionData::fromArray($data);
+        $dto = StoreObjectData::fromArray($data);
         
         // Act
         $result = $dto->toArray();
@@ -63,7 +63,7 @@ class StoreVersionDataTest extends TestCase
         $this->expectException(ValidationException::class);
 
         // Act
-        StoreVersionData::fromArray($data);
+        StoreObjectData::fromArray($data);
     }
 
     /** @test */
@@ -76,6 +76,6 @@ class StoreVersionDataTest extends TestCase
         $this->expectException(ValidationException::class);
 
         // Act
-        StoreVersionData::fromArray($data);
+        StoreObjectData::fromArray($data);
     }
 }

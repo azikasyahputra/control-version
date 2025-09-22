@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('version', function (Blueprint $table) {
+        Schema::create('objects', function (Blueprint $table) {
             $table->id();
             $table->string('key',191)->unique();
             $table->longText('value');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('objects');
     }
 };

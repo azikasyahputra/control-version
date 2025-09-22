@@ -2,20 +2,20 @@
 
 namespace Database\Factories;
 
-use App\Models\Version;
+use App\Models\Objects;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Version>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Objects>
  */
-class VersionFactory extends Factory
+class ObjectsFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Version::class;
+    protected $model = Objects::class;
 
     /**
      * Define the model's default state.

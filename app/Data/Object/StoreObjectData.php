@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Data\Version;
+namespace App\Data\Object;
 
 use App\Helper\CheckConvertStringJson;
 use App\Rules\IsStringOrJson;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class StoreVersionData {
+class StoreObjectData {
     public function __construct(
         public readonly string $key,
         public readonly string|array $value

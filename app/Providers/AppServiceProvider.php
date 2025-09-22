@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Interfaces\VersionRepositoryInterface;
-use App\Repositories\VersionRepository;
+use App\Interfaces\ObjectRepositoryInterface;
+use App\Repositories\ObjectRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(VersionRepositoryInterface::class, VersionRepository::class);
+        $this->app->bind(ObjectRepositoryInterface::class, ObjectRepository::class);
     }
 
     /**
