@@ -20,7 +20,7 @@ class VersionServices
 
     public function all(): Collection
     {
-        return $this->versionRepository->getAll() ?: collect();
+        return $this->versionRepository->getAll() ?? collect();
     }
     
     public function store(StoreVersionData $data): array

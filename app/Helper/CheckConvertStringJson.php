@@ -11,9 +11,10 @@ class CheckConvertStringJson{
     public function convert() : string
     {
         $value = $this->data;
-        $decoded = json_decode($value);
+        json_decode($value);
         if (json_last_error() === JSON_ERROR_NONE) {
-            $value = json_encode($decoded);
+            $value = json_encode(json_decode($value));
+            
         }
         return $value;
     }

@@ -19,9 +19,7 @@ class VersionApiTest extends TestCase
 
         $response->assertStatus(201);
 
-        $response->assertJsonStructure([
-            'Time'
-        ]);
+        $response->assertJsonStructure(['Time']);
 
         $this->assertDatabaseHas('version', [
             'key' => 'app_version',
@@ -61,9 +59,7 @@ class VersionApiTest extends TestCase
 
         $response->assertStatus(201);
 
-        $response->assertJsonStructure([
-            'Time'
-        ]);
+        $response->assertJsonStructure(['Time']);
 
         $this->assertDatabaseHas('version', [
             'key' => 'user_prefs',
@@ -124,7 +120,7 @@ class VersionApiTest extends TestCase
     /** @test */
     public function it_can_get_the_version_for_a_key(): void
     {
-        $version = Version::create([
+        Version::create([
             'key' => 'feature_flag', 
             'value' => 'true',
             'created_at' => now()->getTimestamp()
@@ -160,8 +156,7 @@ class VersionApiTest extends TestCase
     {
         $data = Version::create([
             'key' => 'api_endpoint', 
-            'value' => 'v2',
-            'created_at' => now()->getTimestamp()
+            'value' => 'v2'
         ]);
         
         $timestamp = 'ASDKJKABC23';
