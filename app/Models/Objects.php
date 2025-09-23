@@ -29,4 +29,27 @@ class Objects extends Model
             }
         });
     }
+
+    public function setValueAttribute($value)
+    {
+        if(is_array($value)){
+            $this->attributes['value'] = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        }else{
+            $this->attributes['value'] = $value;
+        }
+    }
+
+    public function getValueAttribute($value)
+    {
+        $decoded = json_decode($value, true);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $value = $decoded;
+        }
+
+        if(is_bool($value)){
+            $value = $value ? 'true' : 'false';
+        }
+
+        return $value;
+    }
 }

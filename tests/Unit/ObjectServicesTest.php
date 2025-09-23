@@ -136,7 +136,7 @@ class ObjectServicesTest extends TestCase
         $getObjectDto = GetObjectData::fromRequest($key, $request);
         $assignedObject = new Objects(['key' => $key, 'value' => json_encode(['some-value'=>'test'])]);
         
-        $expectedResult = (new CheckConvertStringJson($assignedObject->value))->reConvert();
+        $expectedResult = $assignedObject->value;
 
         $this->objectRepositoryMock
             ->shouldReceive('findByIdWithQuery')

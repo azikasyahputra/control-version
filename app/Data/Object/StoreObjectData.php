@@ -2,7 +2,6 @@
 
 namespace App\Data\Object;
 
-use App\Helper\CheckConvertStringJson;
 use App\Rules\IsStringOrJson;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -26,11 +25,10 @@ class StoreObjectData {
         }
         
         $validatedData = $validator->validated();
-        $value = (new CheckConvertStringJson($validatedData['value']))->convert();
         
         return new self(
             key: $validatedData['key'],
-            value: $value
+            value: $validatedData['value']
         );
     }
 

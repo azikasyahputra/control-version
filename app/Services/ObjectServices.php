@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Data\Object\GetObjectData;
 use App\Data\Object\StoreObjectData;
-use App\Helper\CheckConvertStringJson;
 use App\Helper\UnixTimestampFormatter;
-use App\Models\Objects;
 use App\Interfaces\ObjectRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -21,7 +19,8 @@ class ObjectServices
 
     public function all(): Collection
     {
-        return $this->objectRepository->getAll() ?? collect();
+        $data = $this->objectRepository->getAll() ?? collect();
+        return $data;
     }
     
     public function store(StoreObjectData $data): string
@@ -37,7 +36,7 @@ class ObjectServices
         $value = null;
         $object =  $this->objectRepository->findByIdWithQuery($data);
         if(!empty($object)){
-            $value = (new CheckConvertStringJson($object->value))->reConvert();
+            $value = $object->value;
         }
         return $value;
     }

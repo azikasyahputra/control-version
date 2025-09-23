@@ -133,10 +133,8 @@ class ObjectControllerTest extends TestCase
     {
         // Arrange
         $key = 'mykey';
-        // The service is expected to return a Objects model instance
-        $objectModel = new Objects(['key' => $key, 'value' => 'myvalue']);
-        $expectedJson = ['key' => $key, 'value' => 'myvalue'];
-
+        $value = 'myvalue';
+        
         $this->objectServicesMock
             ->shouldReceive('find')
             ->once()
@@ -144,14 +142,14 @@ class ObjectControllerTest extends TestCase
             ->with(Mockery::on(function ($dto) use ($key) {
                 return $dto instanceof GetObjectData && $dto->key === $key && $dto->timestamp === null;
             }))
-            ->andReturn($objectModel);
+            ->andReturn($value);
         
         // Act
         $response = $this->getJson("/api/object/{$key}");
 
         // Assert
         $response->assertStatus(200)
-                 ->assertJsonFragment($expectedJson);
+                 ->assertSeeText($value);
     }
     
     /**
@@ -161,9 +159,8 @@ class ObjectControllerTest extends TestCase
     {
         // Arrange
         $key = 'mykey';
-        $timestamp = 1672531200; // Example: 2023-01-01 00:00:00
-        $objectModel = new Objects(['key' => $key, 'value' => 'old-value']);
-        $expectedJson = ['key' => $key, 'value' => 'old-value'];
+        $timestamp = 1672531200;
+        $value = 'myvalue';
 
         $this->objectServicesMock
             ->shouldReceive('find')
@@ -172,14 +169,14 @@ class ObjectControllerTest extends TestCase
             ->with(Mockery::on(function ($dto) use ($key, $timestamp) {
                 return $dto instanceof GetObjectData && $dto->key === $key && $dto->timestamp === $timestamp;
             }))
-            ->andReturn($objectModel);
+            ->andReturn($value);
 
         // Act
         $response = $this->getJson("/api/object/{$key}?timestamp={$timestamp}");
 
         // Assert
         $response->assertStatus(200)
-                 ->assertJsonFragment($expectedJson);
+                 ->assertSeeText($value);
     }
 
 
