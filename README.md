@@ -1,4 +1,4 @@
-Laravel Key-Value Store API
+**Laravel Key-Value Store API**
 
 This project is a simple RESTful API built with Laravel for storing and retrieving version-controlled key-value pairs. This guide explains how to set up and run the project in a local development environment.
 Prerequisites
@@ -10,8 +10,9 @@ Before you begin, ensure you have the following installed on your system:
     Composer
 
     A local database (SQLite, MySQL, PostgreSQL, etc.)
+    
 
-Setup and Installation
+**Setup and Installation**
 
 Follow these steps to get the application running on your local machine.
 
@@ -19,35 +20,38 @@ Follow these steps to get the application running on your local machine.
 
 First, clone this repository to your local machine using Git.
 
-git clone <your-repository-url>
-cd <project-directory>
+    git clone <your-repository-url>
+    cd <project-directory>
 
 2. Install Dependencies
 
 Install the project's PHP dependencies using Composer.
 
-composer install
+    composer install
 
 3. Configure Your Environment
 
 Copy the example environment file and generate a new application key.
 
-cp .env.example .env
-php artisan key:generate
+    cp .env.example .env
+    php artisan key:generate
 
-Next, open the .env file in a text editor and configure your database connection details (e.g., DB_CONNECTION, DB_HOST, DB_DATABASE, etc.). 4. Run Database Migrations
+Next, open the .env file in a text editor and configure your database connection details (e.g., DB_CONNECTION, DB_HOST, DB_DATABASE, etc.). 
+
+4. Run Database Migrations
 
 Set up the necessary database tables by running the Laravel migrations.
 
-php artisan migrate
+    php artisan migrate
 
 5. Start the Development Server
 
 You can now start the local development server, which will typically run on http://127.0.0.1:8000.
 
-php artisan serve
+    php artisan serve
 
-How to Access the API
+
+**How to Access the API**
 
 The application provides several endpoints to manage key-value data. You can use tools like Postman, Insomnia, or curl to interact with them. The base URL will be your local server address (e.g., http://127.0.0.1:8000).
 
@@ -152,12 +156,13 @@ This endpoint is primarily for debugging and retrieves all records from the data
         }
     ]
 
-Running the Test Suite
+
+**Running the Test Suite**
 
 To run the project's test suite, use the following artisan command:
 
-php artisan test
+    php artisan test
 
 To generate a code coverage report (requires Xdebug or PCOV to be installed), you can run:
 
-php artisan test --coverage-html=coverage
+    php artisan test --coverage-html=coverage
