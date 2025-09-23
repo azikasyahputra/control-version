@@ -19,11 +19,11 @@ class ObjectApiTest extends TestCase
 
         $response->assertStatus(201);
 
-        $response->assertJsonStructure(['Time']);
+        $response->assertSee('Time');
 
         $this->assertDatabaseHas('objects', [
             'key' => 'app_version',
-            'value' => '"1.0.0"'
+            'value' => '1.0.0'
         ]);
     }
 
@@ -36,13 +36,11 @@ class ObjectApiTest extends TestCase
 
         $response->assertStatus(201);
 
-        $response->assertJsonStructure([
-            'Time'
-        ]);
+        $response->assertSee('Time');
 
         $this->assertDatabaseHas('objects', [
             'key' => 'user_settings',
-            'value' => json_encode('{"theme":"dark","notifications":true}')
+            'value' => '{"theme":"dark","notifications":true}'
         ]);
     }
 
@@ -58,12 +56,11 @@ class ObjectApiTest extends TestCase
         $response = $this->postJson('/api/object', $payload);
 
         $response->assertStatus(201);
-
-        $response->assertJsonStructure(['Time']);
+        $response->assertSee('Time');
 
         $this->assertDatabaseHas('objects', [
             'key' => 'user_prefs',
-            'value' => json_encode($jsonData)
+            'value' => $jsonData
         ]);
     }
 
@@ -120,7 +117,7 @@ class ObjectApiTest extends TestCase
     /** @test */
     public function it_can_get_the_object_for_a_key(): void
     {
-        Objects::create([
+        $data = Objects::create([
             'key' => 'feature_flag', 
             'value' => 'true',
             'created_at' => now()->getTimestamp()
@@ -128,10 +125,10 @@ class ObjectApiTest extends TestCase
 
         $response = $this->getJson('/api/object/feature_flag');
 
-        $response->assertStatus(200)
-                ->assertJson([
-                    'value' => 'true',
-                ]);
+        $response->assertStatus(200);
+
+        $responseBody = json_decode($response->getContent());
+        $this->assertEquals($data->value,$responseBody);
     }
 
     /** @test */
@@ -147,8 +144,10 @@ class ObjectApiTest extends TestCase
 
         $response = $this->getJson("/api/object/api_endpoint?timestamp={$timestamp}");
 
-        $response->assertStatus(200)
-                 ->assertJson(['value' => 'v2']);
+        $response->assertStatus(200);
+        $responseBody = json_decode($response->getContent());
+        
+        $this->assertEquals($data->value,$responseBody);
     }
 
      /** @test */

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Data\Object\GetObjectData;
 use App\Data\Object\StoreObjectData;
+use App\Helper\CheckConvertStringJson;
 use App\Helper\UnixTimestampFormatter;
 use App\Models\Objects;
 use App\Interfaces\ObjectRepositoryInterface;
@@ -23,19 +24,21 @@ class ObjectServices
         return $this->objectRepository->getAll() ?? collect();
     }
     
-    public function store(StoreObjectData $data): array
+    public function store(StoreObjectData $data): string
     {
         $storeData = $this->objectRepository->create($data);
         $timestampFormatter = new UnixTimestampFormatter($storeData->created_at);
-        $timestamp = [
-            'Time' => $timestampFormatter->convert($storeData->created_at)
-        ];
+        $timestamp = 'Time: '.$timestampFormatter->convert($storeData->created_at);
         return $timestamp;
     }
 
-    public function find(GetObjectData $data): ?Objects
+    public function find(GetObjectData $data): string|object|array|null
     {
+        $value = null;
         $object =  $this->objectRepository->findByIdWithQuery($data);
-        return $object;
+        if(!empty($object)){
+            $value = (new CheckConvertStringJson($object->value))->reConvert();
+        }
+        return $value;
     }
 }

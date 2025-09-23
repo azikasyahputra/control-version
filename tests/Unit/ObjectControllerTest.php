@@ -86,7 +86,7 @@ class ObjectControllerTest extends TestCase
         // Arrange
         $requestData = ['mykey' => 'myvalue'];
         // The service returns a timestamp array
-        $expectedResponse = ['Time' => '10:30 AM'];
+        $expectedResponse = 'Time: 10:30 AM';
 
         $this->objectServicesMock
             ->shouldReceive('store')
@@ -103,8 +103,11 @@ class ObjectControllerTest extends TestCase
         $response = $this->postJson('/api/object', $requestData);
 
         // Assert
-        $response->assertStatus(201)
-                 ->assertJson($expectedResponse);
+        $response->assertStatus(201);
+        
+        $responseBody = json_decode($response->getContent());
+
+        $this->assertEquals($expectedResponse,$responseBody);
     }
 
     /**

@@ -19,10 +19,6 @@ class Objects extends Model
         'created_at'
     ];
 
-    protected $casts = [
-        'value' => 'array',
-    ];
-
     protected static function boot()
     {
         parent::boot();

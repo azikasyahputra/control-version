@@ -4,6 +4,8 @@ namespace Tests\Unit\Services;
 
 use App\Data\Object\GetObjectData;
 use App\Data\Object\StoreObjectData;
+use App\Helper\CheckConvertStringJson;
+use App\Helper\UnixTimestampFormatter;
 use App\Interfaces\ObjectRepositoryInterface;
 use App\Models\Objects;
 use App\Services\ObjectServices;
@@ -80,6 +82,9 @@ class ObjectServicesTest extends TestCase
         $createdObject = new Objects(['key' => 'my-key', 'value' => 'my-value']);
         $createdObject->created_at = now()->timestamp; // Set a timestamp
 
+        $formattedTimeStamp = (new UnixTimestampFormatter($createdObject->created_at))->convert();
+        $expectedResult = 'Time: '.$formattedTimeStamp;
+
         $this->objectRepositoryMock
             ->shouldReceive('create')
             ->once()
@@ -90,34 +95,60 @@ class ObjectServicesTest extends TestCase
         $result = $this->objectServices->store($storeDataDto);
 
         // Assert
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('Time', $result);
-        $this->assertNotEmpty($result['Time']);
+        $this->assertNotEmpty($result);
+        $this->assertEquals($result,$expectedResult);
     }
 
     /**
      * @test
      */
-    public function find_returns_version_object_from_repository()
+    public function find_returns_value_object_string_from_repository()
     {
         // Arrange
         $key = 'find-key';
         $request = new \Illuminate\Http\Request();
         $getObjectDto = GetObjectData::fromRequest($key, $request);
-        $expectedObject = new Objects(['key' => $key, 'value' => 'some-value']);
+        $assignedObject = new Objects(['key' => $key, 'value' => 'some-value']);
         
+        $expectedResult = $assignedObject->value;
+
         $this->objectRepositoryMock
             ->shouldReceive('findByIdWithQuery')
             ->once()
             ->with($getObjectDto)
-            ->andReturn($expectedObject);
+            ->andReturn($assignedObject);
             
         // Act
         $result = $this->objectServices->find($getObjectDto);
 
         // Assert
-        $this->assertInstanceOf(Objects::class, $result);
-        $this->assertEquals($expectedObject, $result);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+     /**
+     * @test
+     */
+    public function find_returns_value_object_json_from_repository()
+    {
+        // Arrange
+        $key = 'find-key';
+        $request = new \Illuminate\Http\Request();
+        $getObjectDto = GetObjectData::fromRequest($key, $request);
+        $assignedObject = new Objects(['key' => $key, 'value' => json_encode(['some-value'=>'test'])]);
+        
+        $expectedResult = (new CheckConvertStringJson($assignedObject->value))->reConvert();
+
+        $this->objectRepositoryMock
+            ->shouldReceive('findByIdWithQuery')
+            ->once()
+            ->with($getObjectDto)
+            ->andReturn($assignedObject);
+            
+        // Act
+        $result = $this->objectServices->find($getObjectDto);
+
+        // Assert
+        $this->assertEquals($expectedResult, $result);
     }
     
     /**
