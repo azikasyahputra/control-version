@@ -1,66 +1,163 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Laravel Key-Value Store API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is a simple RESTful API built with Laravel for storing and retrieving version-controlled key-value pairs. This guide explains how to set up and run the project in a local development environment.
+Prerequisites
 
-## About Laravel
+Before you begin, ensure you have the following installed on your system:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+    PHP 8.1 or higher
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    Composer
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    A local database (SQLite, MySQL, PostgreSQL, etc.)
 
-## Learning Laravel
+Setup and Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Follow these steps to get the application running on your local machine.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Clone the Repository
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+First, clone this repository to your local machine using Git.
 
-## Laravel Sponsors
+git clone <your-repository-url>
+cd <project-directory>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. Install Dependencies
 
-### Premium Partners
+Install the project's PHP dependencies using Composer.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+composer install
 
-## Contributing
+3. Configure Your Environment
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Copy the example environment file and generate a new application key.
 
-## Code of Conduct
+cp .env.example .env
+php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Next, open the .env file in a text editor and configure your database connection details (e.g., DB_CONNECTION, DB_HOST, DB_DATABASE, etc.). 4. Run Database Migrations
 
-## Security Vulnerabilities
+Set up the necessary database tables by running the Laravel migrations.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+php artisan migrate
 
-## License
+5. Start the Development Server
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+You can now start the local development server, which will typically run on http://127.0.0.1:8000.
+
+php artisan serve
+
+How to Access the API
+
+The application provides several endpoints to manage key-value data. You can use tools like Postman, Insomnia, or curl to interact with them. The base URL will be your local server address (e.g., http://127.0.0.1:8000).
+
+1. Store a New Key-Value Pair
+
+This endpoint creates a new version for a given key. The request body must be a JSON object with a single, dynamic key.
+
+    Method: POST
+
+    Endpoint: /api/object
+
+    Body (JSON):
+    A JSON object with one key. The value can be a string, number, boolean, or a JSON object/array.
+
+    {
+        "app_version": "1.2.3"
+    }
+
+    or
+
+    {
+        "feature_flags": {
+            "new_dashboard": true,
+            "beta_access": false
+        }
+    }
+
+    Success Response (201 Created):
+    Returns the creation time of the new object record.
+
+        "Time: 11:07 AM"
+
+2. Get the Latest Value for a Key
+
+This endpoint retrieves the most recent value stored for a specific key.
+
+    Method: GET
+
+    Endpoint: /api/object/{key}
+
+    Example URL: http://127.0.0.1:8000/api/object/app_version
+    Example URL: http://127.0.0.1:8000/api/object/feature_flags
+
+    Success Response (200 OK):
+    Returns the value of object either its string or JSON.
+
+        "1.2.3"
+
+    OR
+
+        {
+            "new_dashboard": true,
+            "beta_access": false
+        }
+
+3. Get a Historical Value for a Key
+
+Retrieve the value for a key as it was at a specific point in time by providing a Unix timestamp.
+
+    Method: GET
+
+    Endpoint: /api/object/{key}?timestamp={unix_timestamp}
+
+    Example URL: http://127.0.0.1:8000/api/object/app_version?timestamp=1727060000
+    Example URL: http://127.0.0.1:8000/api/object/feature_flags?timestamp=1727060000
+
+    Success Response (200 OK):
+    Returns the value of object either its string or JSON at the given timestamp.
+
+        "1.2.3"
+
+    OR
+
+        {
+            "new_dashboard": true,
+            "beta_access": false
+        }
+
+4. Get All Object Records
+
+This endpoint is primarily for debugging and retrieves all records from the database.
+
+    Method: GET
+
+    Endpoint: /api/object/get_all_records
+
+    Success Response (200 OK):
+    Returns a JSON array of all objects.
+
+    [
+        {
+            "id": 1,
+            "key": "app_version",
+            "value": "1.2.3",
+            "created_at": 1727064420,
+        },
+        {
+            "id": 2,
+            "key": "feature_flags",
+            "value": { "new_dashboard": true },
+            "created_at": 1727064450,
+        }
+    ]
+
+Running the Test Suite
+
+To run the project's test suite, use the following artisan command:
+
+php artisan test
+
+To generate a code coverage report (requires Xdebug or PCOV to be installed), you can run:
+
+php artisan test --coverage-html=coverage
