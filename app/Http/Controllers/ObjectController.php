@@ -32,12 +32,16 @@ class ObjectController extends Controller
         return response()->json($objectData,200);
     }
 
-    public function store(DynamicKeyStoreRequest $request) : JsonResponse
+    public function store(DynamicKeyStoreRequest $request): JsonResponse
     {
         $dynamicData = $request->getDynamicKeyAndValue();
-        $storeObjectDto = StoreObjectData::fromArray($dynamicData);
-        $storeObject = $this->objectServices->store($storeObjectDto);
-        return $this->success($storeObject,201);
+        $arrayResponse = [];
+        foreach($dynamicData as $data){
+            $storeObjectDto = StoreObjectData::fromArray($data);
+            $storeObject = $this->objectServices->store($storeObjectDto);
+            $arrayResponse[$data['key']] = $storeObject;
+        }
+        return $this->success($arrayResponse,201);
     }
 
     public function show(string $id, Request $request): JsonResponse

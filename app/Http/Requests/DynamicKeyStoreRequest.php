@@ -28,9 +28,9 @@ class DynamicKeyStoreRequest extends FormRequest
     {
         $data = $this->all();
 
-        if (!is_array($data) || count($data) !== 1) {
+        if (!is_array($data)) {
             throw ValidationException::withMessages([
-                'body' => 'The request body must be a JSON object with a single key-value pair.'
+                'body' => 'The request body must be a JSON object'
             ]);
         }
     }
@@ -43,9 +43,20 @@ class DynamicKeyStoreRequest extends FormRequest
     public function getDynamicKeyAndValue(): array
     {   
         $data = $this->all();
-        return [
-            'key' => key($data),
-            'value' => current($data)
-        ];
+        $arrayKeyData = [];
+
+        foreach($data as $key=>$value){
+            $arrayKeyData[] = [
+                'key' => $key,
+                'value' => $value
+            ];
+        }
+
+        return $arrayKeyData;
+
+        // return [
+        //     'key' => key($data),
+        //     'value' => current($data)
+        // ];
     }
 }

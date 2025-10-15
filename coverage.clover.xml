@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1760492263">
+  <project timestamp="1760492263">
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Data\Object\GetObjectData.php">
+      <class name="App\Data\Object\GetObjectData" namespace="global">
+        <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="18" coveredelements="18"/>
+      </class>
+      <line num="10" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="15"/>
+      <line num="14" type="stmt" count="15"/>
+      <line num="16" type="method" name="fromRequest" visibility="public" complexity="2" crap="2" count="17"/>
+      <line num="18" type="stmt" count="17"/>
+      <line num="19" type="stmt" count="17"/>
+      <line num="20" type="stmt" count="17"/>
+      <line num="21" type="stmt" count="17"/>
+      <line num="23" type="stmt" count="17"/>
+      <line num="24" type="stmt" count="17"/>
+      <line num="25" type="stmt" count="17"/>
+      <line num="26" type="stmt" count="17"/>
+      <line num="28" type="stmt" count="17"/>
+      <line num="29" type="stmt" count="2"/>
+      <line num="32" type="stmt" count="15"/>
+      <line num="34" type="stmt" count="15"/>
+      <line num="35" type="stmt" count="15"/>
+      <line num="36" type="stmt" count="15"/>
+      <line num="37" type="stmt" count="15"/>
+      <metrics loc="39" ncloc="39" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="18" coveredelements="18"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Data\Object\StoreObjectData.php">
+      <class name="App\Data\Object\StoreObjectData" namespace="global">
+        <metrics complexity="4" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="19" coveredelements="19"/>
+      </class>
+      <line num="10" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="9"/>
+      <line num="14" type="stmt" count="9"/>
+      <line num="16" type="method" name="fromArray" visibility="public" complexity="2" crap="2" count="12"/>
+      <line num="18" type="stmt" count="12"/>
+      <line num="19" type="stmt" count="12"/>
+      <line num="20" type="stmt" count="12"/>
+      <line num="21" type="stmt" count="12"/>
+      <line num="23" type="stmt" count="12"/>
+      <line num="24" type="stmt" count="3"/>
+      <line num="27" type="stmt" count="9"/>
+      <line num="29" type="stmt" count="9"/>
+      <line num="30" type="stmt" count="9"/>
+      <line num="31" type="stmt" count="9"/>
+      <line num="32" type="stmt" count="9"/>
+      <line num="35" type="method" name="toArray" visibility="public" complexity="1" crap="1" count="5"/>
+      <line num="37" type="stmt" count="5"/>
+      <line num="38" type="stmt" count="5"/>
+      <line num="39" type="stmt" count="5"/>
+      <line num="40" type="stmt" count="5"/>
+      <metrics loc="42" ncloc="42" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="19" coveredelements="19"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Helper\UnixTimestampFormatter.php">
+      <class name="App\Helper\UnixTimestampFormatter" namespace="global">
+        <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="5" coveredelements="5"/>
+      </class>
+      <line num="9" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="6"/>
+      <line num="11" type="stmt" count="6"/>
+      <line num="12" type="stmt" count="6"/>
+      <line num="15" type="method" name="convert" visibility="public" complexity="1" crap="1" count="6"/>
+      <line num="17" type="stmt" count="6"/>
+      <metrics loc="20" ncloc="20" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="5" coveredelements="5"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Http\Controllers\Controller.php">
+      <class name="App\Http\Controllers\Controller" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Http\Controllers\ObjectController.php">
+      <class name="App\Http\Controllers\ObjectController" namespace="global">
+        <metrics complexity="6" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="18" coveredelements="18"/>
+      </class>
+      <line num="19" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="19"/>
+      <line num="21" type="stmt" count="19"/>
+      <line num="24" type="method" name="index" visibility="public" complexity="2" crap="2" count="4"/>
+      <line num="26" type="stmt" count="4"/>
+      <line num="28" type="stmt" count="4"/>
+      <line num="29" type="stmt" count="2"/>
+      <line num="32" type="stmt" count="2"/>
+      <line num="35" type="method" name="store" visibility="public" complexity="1" crap="1" count="5"/>
+      <line num="37" type="stmt" count="5"/>
+      <line num="38" type="stmt" count="5"/>
+      <line num="39" type="stmt" count="4"/>
+      <line num="40" type="stmt" count="4"/>
+      <line num="43" type="method" name="show" visibility="public" complexity="2" crap="2" count="7"/>
+      <line num="45" type="stmt" count="7"/>
+      <line num="46" type="stmt" count="6"/>
+      <line num="48" type="stmt" count="6"/>
+      <line num="49" type="stmt" count="2"/>
+      <line num="51" type="stmt" count="4"/>
+      <metrics loc="54" ncloc="54" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="18" coveredelements="18"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Http\Requests\DynamicKeyStoreRequest.php">
+      <class name="App\Http\Requests\DynamicKeyStoreRequest" namespace="global">
+        <metrics complexity="6" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="16" coveredelements="16"/>
+      </class>
+      <line num="13" type="method" name="authorize" visibility="public" complexity="1" crap="1" count="12"/>
+      <line num="15" type="stmt" count="12"/>
+      <line num="22" type="method" name="rules" visibility="public" complexity="1" crap="1" count="12"/>
+      <line num="24" type="stmt" count="12"/>
+      <line num="27" type="method" name="passedValidation" visibility="public" complexity="3" crap="3" count="12"/>
+      <line num="29" type="stmt" count="12"/>
+      <line num="31" type="stmt" count="12"/>
+      <line num="32" type="stmt" count="6"/>
+      <line num="33" type="stmt" count="6"/>
+      <line num="34" type="stmt" count="6"/>
+      <line num="43" type="method" name="getDynamicKeyAndValue" visibility="public" complexity="1" crap="1" count="7"/>
+      <line num="45" type="stmt" count="7"/>
+      <line num="46" type="stmt" count="7"/>
+      <line num="47" type="stmt" count="7"/>
+      <line num="48" type="stmt" count="7"/>
+      <line num="49" type="stmt" count="7"/>
+      <metrics loc="51" ncloc="39" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="16" coveredelements="16"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Interfaces\ObjectRepositoryInterface.php">
+      <metrics loc="15" ncloc="15" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Models\Objects.php">
+      <class name="App\Models\Objects" namespace="global">
+        <metrics complexity="8" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="13" elements="17" coveredelements="15"/>
+      </class>
+      <line num="22" type="method" name="boot" visibility="protected" complexity="2" crap="2" count="20"/>
+      <line num="24" type="stmt" count="20"/>
+      <line num="26" type="stmt" count="20"/>
+      <line num="27" type="stmt" count="13"/>
+      <line num="28" type="stmt" count="11"/>
+      <line num="30" type="stmt" count="20"/>
+      <line num="33" type="method" name="setValueAttribute" visibility="public" complexity="2" crap="2.15" count="16"/>
+      <line num="35" type="stmt" count="16"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="16"/>
+      <line num="42" type="method" name="getValueAttribute" visibility="public" complexity="4" crap="4" count="5"/>
+      <line num="44" type="stmt" count="5"/>
+      <line num="45" type="stmt" count="5"/>
+      <line num="46" type="stmt" count="2"/>
+      <line num="49" type="stmt" count="5"/>
+      <line num="50" type="stmt" count="1"/>
+      <line num="53" type="stmt" count="5"/>
+      <metrics loc="56" ncloc="56" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="13" elements="17" coveredelements="15"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Models\User.php">
+      <class name="App\Models\User" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="46" ncloc="30" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Repositories\ObjectRepository.php">
+      <class name="App\Repositories\ObjectRepository" namespace="global">
+        <metrics complexity="4" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="11" coveredelements="11"/>
+      </class>
+      <line num="13" type="method" name="getAll" visibility="public" complexity="1" crap="1" count="3"/>
+      <line num="15" type="stmt" count="3"/>
+      <line num="18" type="method" name="create" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="20" type="stmt" count="4"/>
+      <line num="21" type="stmt" count="4"/>
+      <line num="24" type="method" name="findByIdWithQuery" visibility="public" complexity="2" crap="2" count="7"/>
+      <line num="26" type="stmt" count="7"/>
+      <line num="28" type="stmt" count="7"/>
+      <line num="29" type="stmt" count="2"/>
+      <line num="32" type="stmt" count="7"/>
+      <line num="33" type="stmt" count="7"/>
+      <metrics loc="36" ncloc="36" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="11" coveredelements="11"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Rules\IsStringOrJson.php">
+      <class name="App\Rules\IsStringOrJson" namespace="global">
+        <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="4" coveredelements="4"/>
+      </class>
+      <line num="15" type="method" name="passes" visibility="public" complexity="2" crap="2" count="17"/>
+      <line num="17" type="stmt" count="17"/>
+      <line num="23" type="method" name="message" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="25" type="stmt" count="1"/>
+      <metrics loc="28" ncloc="20" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="4" coveredelements="4"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Services\ObjectServices.php">
+      <class name="App\Services\ObjectServices" namespace="global">
+        <metrics complexity="5" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="16" coveredelements="16"/>
+      </class>
+      <line num="15" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="18"/>
+      <line num="17" type="stmt" count="18"/>
+      <line num="20" type="method" name="all" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="22" type="stmt" count="4"/>
+      <line num="23" type="stmt" count="4"/>
+      <line num="26" type="method" name="store" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="28" type="stmt" count="4"/>
+      <line num="29" type="stmt" count="4"/>
+      <line num="30" type="stmt" count="4"/>
+      <line num="31" type="stmt" count="4"/>
+      <line num="34" type="method" name="find" visibility="public" complexity="2" crap="2" count="6"/>
+      <line num="36" type="stmt" count="6"/>
+      <line num="37" type="stmt" count="6"/>
+      <line num="38" type="stmt" count="6"/>
+      <line num="39" type="stmt" count="4"/>
+      <line num="41" type="stmt" count="6"/>
+      <metrics loc="43" ncloc="43" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="16" coveredelements="16"/>
+    </file>
+    <file name="C:\Users\azika\Documents\Project PHP\control-version\app\Traits\ResponseTrait.php">
+      <class name="App\Traits\ResponseTrait" namespace="global">
+        <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
+      </class>
+      <line num="16" type="method" name="success" visibility="public" complexity="1" crap="1" count="10"/>
+      <line num="18" type="stmt" count="10"/>
+      <line num="28" type="method" name="error" visibility="public" complexity="1" crap="1" count="5"/>
+      <line num="30" type="stmt" count="5"/>
+      <line num="31" type="stmt" count="5"/>
+      <line num="32" type="stmt" count="5"/>
+      <line num="33" type="stmt" count="5"/>
+      <metrics loc="35" ncloc="21" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
+    </file>
+    <metrics files="13" loc="478" ncloc="428" classes="10" methods="29" coveredmethods="28" conditionals="0" coveredconditionals="0" statements="102" coveredstatements="101" elements="131" coveredelements="129"/>
+  </project>
+</coverage>
