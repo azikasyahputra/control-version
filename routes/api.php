@@ -20,5 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/object', [ObjectController::class, 'store']);
+
 Route::get('/object/get_all_records', [ObjectController::class, 'index']);
 Route::get('/object/{key}', [ObjectController::class, 'show']);
